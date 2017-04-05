@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.2"
+  defaultConfig {
+    applicationId "ru.medyannikov.testmap"
+    minSdkVersion 17
+    targetSdkVersion 19
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  packagingOptions {
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE'
+  }
+}
+
+
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+
+  // network
+  compile depends.RETROFIT
+  compile depends.RETROFIT_JACKSON_CONVERTER
+  compile depends.RETROFIT_RX_JAVA_ADAPTER
+  compile depends.OK_HTTP
+  compile depends.OK_HTTP_LOGS
+
+  // rx
+  compile depends.RX_PERMISSION
+  compile depends.RX_JAVA
+  compile depends.RX_ANDROID
+
+  compile depends.ANKO_SDK15
+  compile depends.ANKO_SUPPORT_V4
+  compile depends.ANKO_SUPPORT_V7
+
+  // other
+  compile depends.KOTLIN_STDLIB
+  compile 'com.google.maps.android:android-maps-utils:0.5+'
+
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  compile 'com.android.support:appcompat-v7:25.3.1'
+  compile 'com.google.android.gms:play-services-maps:10.2.1'
+  testCompile 'junit:junit:4.12'
+}
+repositories {
+  mavenCentral()
+}

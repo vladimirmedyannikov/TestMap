@@ -1,0 +1,97 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+  ext.kotlin_version = '1.1.1'
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.3.0'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    // NOTE: Do not place your application dependencies here; they belong
+    // in the individual module build.gradle files
+  }
+}
+
+allprojects {
+  repositories {
+    jcenter()
+  }
+}
+
+task clean(type: Delete) {
+  delete rootProject.buildDir
+}
+
+ext.versions = [COMPILE_SDK_VERSION     : 25,
+                MIN_SDK_VERSION         : 17,
+                TARGET_SDK_VERSION      : 23,
+                BUILD_TOOLS_VERSION     : "25.0.0",
+                MULTIDEX_VERSION        : "1.0.1",
+                KOTLIN_VERSION          : "1.1.0",
+                ANKO_VERSION            : "0.8.3",
+                ANDROID_SUPPORT_VERSION : "25.0.0",
+                BUTTERKNIFE_VERSION     : "8.2.1",
+                PLAY_SERVICES_VERSION   : "9.0.0",
+                RETROFIT_VERSION        : "2.1.0",
+                OK_HTTP_VERSION         : "3.4.1",
+                DAGGER_VERSION          : "2.7",
+                GLIDE_VERSION           : "3.7.0",
+                JAVAX_ANNOTATION_VERSION: "1.0",
+                JAVAX_INJECT_VERSION    : "1",
+                RX_ANDROID_VERSION      : "1.2.1",
+                RX_JAVA_VERSION         : "1.2.0",
+                RX_KOTLIN_VERSION       : "0.60.0",
+                RX_PERMISSIONS_VERSION  : "0.8.0@aar",
+                JUNIT_VERSION           : "4.12",
+                STETHO_VESRSION         : "1.4.1",
+                VITAMIO_VERSION         : "4.2.2",
+                EXO_PLAYER_VERSION      : "r2.3.1",
+                GESTURE_VIEW_VERSION    : "2.1.1",
+                FLEX_BOX_VERSION        : "0.2.4",
+                DECORO_VERSION          : "1.3.0",
+                SPEK_VERSION            : "1.0",
+                MOCKITO_KOTLIN_VERSION  : "1.3.0"]
+
+ext.depends = [MULTIDEX                  : "com.android.support:multidex:$versions.MULTIDEX_VERSION",
+               KOTLIN_STDLIB             : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+               ANKO_SDK15                : "org.jetbrains.anko:anko-sdk15:$versions.ANKO_VERSION",
+               ANKO_SUPPORT_V4           : "org.jetbrains.anko:anko-support-v4:$versions.ANKO_VERSION",
+               ANKO_SUPPORT_V7           : "org.jetbrains.anko:anko-appcompat-v7:$versions.ANKO_VERSION",
+               ANDROID_SUPPORT_V4        : "com.android.support:support-v4:$versions.ANDROID_SUPPORT_VERSION",
+               ANDROID_APPCOMPAT_V7      : "com.android.support:appcompat-v7:$versions.ANDROID_SUPPORT_VERSION",
+               ANDROID_RECYCLER_VIEW     : "com.android.support:recyclerview-v7:$versions.ANDROID_SUPPORT_VERSION",
+               ANDROID_DESIGN            : "com.android.support:design:$versions.ANDROID_SUPPORT_VERSION",
+               RX_JAVA                   : "io.reactivex:rxjava:$versions.RX_JAVA_VERSION",
+               RX_ANDROID                : "io.reactivex:rxandroid:$versions.RX_ANDROID_VERSION",
+               RX_KOTLIN                 : "io.reactivex:rxkotlin:$versions.RX_KOTLIN_VERSION",
+               RETROFIT                  : "com.squareup.retrofit2:retrofit:$versions.RETROFIT_VERSION",
+               RETROFIT_JACKSON_CONVERTER: "com.squareup.retrofit2:converter-jackson:$versions.RETROFIT_VERSION",
+               RETROFIT_RX_JAVA_ADAPTER  : "com.squareup.retrofit2:adapter-rxjava:$versions.RETROFIT_VERSION",
+               OK_HTTP                   : "com.squareup.okhttp3:logging-interceptor:$versions.OK_HTTP_VERSION",
+               OK_HTTP_LOGS              : "com.squareup.okhttp3:okhttp:$versions.OK_HTTP_VERSION",
+               GLIDE                     : "com.github.bumptech.glide:glide:$versions.GLIDE_VERSION",
+               JUNIT                     : "junit:junit:$versions.JUNIT_VERSION",
+               BUTTERKNIFE               : "com.jakewharton:butterknife:$versions.BUTTERKNIFE_VERSION",
+               BUTTERKNIFE_COMPILER      : "com.jakewharton:butterknife-compiler:$versions.BUTTERKNIFE_VERSION",
+               PLAY_SEVICES_GCM          : "com.google.android.gms:play-services-gcm:$versions.PLAY_SERVICES_VERSION",
+               PLAY_SERVICES_ANALYTICS   : "com.google.android.gms:play-services-analytics:$versions.PLAY_SERVICES_VERSION",
+               DAGGER_COMPILER           : "com.google.dagger:dagger-compiler:$versions.DAGGER_VERSION",
+               DAGGER                    : "com.google.dagger:dagger:$versions.DAGGER_VERSION",
+               JAVAX_ANNOTATION          : "javax.annotation:jsr250-api:$versions.JAVAX_ANNOTATION_VERSION",
+               JAVAX_INJECT              : "javax.inject:javax.inject:$versions.JAVAX_INJECT_VERSION",
+               STETHO                    : "com.facebook.stetho:stetho:$versions.STETHO_VESRSION",
+               RX_PERMISSION             : "com.tbruyelle.rxpermissions:rxpermissions:$versions.RX_PERMISSIONS_VERSION",
+               VITAMIO                   : "me.neavo:vitamio:$versions.VITAMIO_VERSION",
+               EXO_PLAYER                : "com.google.android.exoplayer:exoplayer:$versions.EXO_PLAYER_VERSION",
+               CARD_VIEW                 : "com.android.support:cardview-v7:$versions.ANDROID_SUPPORT_VERSION",
+               GESTURE_VIEW              : "com.alexvasilkov:gesture-views:$versions.GESTURE_VIEW_VERSION",
+               FLEX_BOX                  : "com.google.android:flexbox:$versions.FLEX_BOX_VERSION",
+               DECORO                    : "ru.tinkoff.decoro:decoro:$versions.DECORO_VERSION",
+               RX_BINDING                : "com.jakewharton.rxbinding:rxbinding:1.0.0",
+               ROUND_IMAGE               : "com.makeramen:roundedimageview:2.2.1",
+               SPEK                      : "org.jetbrains.spek:spek:$versions.SPEK_VERSION",
+               MOCKITO_KOTLIN            : "com.nhaarman:mockito-kotlin:$versions.MOCKITO_KOTLIN_VERSION",
+               REALM                     : "io.realm:realm-gradle-plugin:3.0.0",
+               CUSTOM_TABS               : "com.android.support:customtabs:$versions.BUILD_TOOLS_VERSION"]
