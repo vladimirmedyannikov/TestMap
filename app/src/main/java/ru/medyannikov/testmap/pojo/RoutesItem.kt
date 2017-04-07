@@ -10,5 +10,6 @@ class RoutesItem {
 	val bounds: Bounds? = null
 	@JsonProperty("overview_polyline")
 	val overviewPolyline: OverviewPolyline? = null
+	@JsonProperty("waypoint_order")
 	val waypointOrder: List<Int?>? = null
 }

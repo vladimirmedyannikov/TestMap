@@ -1,7 +1,10 @@
 package ru.medyannikov.testmap
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
+import android.widget.ImageButton
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -12,7 +15,9 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast
+import org.jetbrains.anko.onClick
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -20,8 +25,8 @@ import ru.medyannikov.testmap.pojo.DirectionResponse
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
@@ -31,6 +36,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
     ObjectMapper().configure(
         DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
   }
+
+  val navigatonButton by lazy { find<ImageButton>(R.id.navigation_button) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -52,6 +59,29 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
         .client(client)
         .build()
         .create(GoogleApi::class.java)
+    navigatonButton.onClick {
+      /* val gmmIntentUri = Uri.parse("google.navigation:q=${mStart?.latitude},${mStart?.longitude}")
+       val egmmIntentUri = Uri.parse("google.navigation:q=${mEnd?.latitude},${mEnd?.longitude}")
+       val mapIntent = Intent(Intent.ACTION_VIEW)
+       mapIntent.data = bundleOf()
+       mapIntent.`package` = "com.google.android.apps.maps"
+       startActivity(mapIntent)*/
+      val jsonURL = "https://maps.google.com/maps?"
+      val sBuf = StringBuffer(jsonURL)
+      sBuf.append("saddr=${mMarkers[0]?.latitude},${mMarkers[0]?.longitude}")
+      sBuf.append("&daddr=${mMarkers[1]?.latitude},${mMarkers[1]?.longitude}")
+      mMarkers.forEachIndexed { index, it ->
+        if (index != 0 && index != 1) sBuf.append("+to:${it.latitude},${it.longitude}")
+      }
+      sBuf.append("&sensor=true&mode=DRIVING&optimize:true")
+      sBuf.append("&key=")
+      sBuf.append("AIzaSyDPd1XUXQ99XkVXfU4avf4fJeoVQ2eNj-k")
+
+
+      val sendLocationToMap = Intent(Intent.ACTION_VIEW,
+          Uri.parse(sBuf.toString()))
+      startActivity(sendLocationToMap)
+    }
   }
 
   private var mStart: LatLng? = null
@@ -92,7 +122,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
   private fun onRefreshPooints() {
     mMap.clear()
     val line = PolylineOptions()
-    line.width(4f).color(resources.getColor(android.R.color.holo_red_light))
+    line.width(5f).color(resources.getColor(android.R.color.holo_blue_light)).zIndex(5F)
     val latLngBuilder = LatLngBounds.Builder()
     for (i in mPoints.indices) {
 
@@ -122,7 +152,14 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
       mPoints.addAll(points)
       onRefreshPooints()
     }
+    response?.apply {
 
+      this.routes?.last()?.waypointOrder?.apply {
+        val result: MutableList<LatLng> = ArrayList()
+        forEach { result.add(mMarkers[it ?: 0]) }
+        mMarkers = result
+      }
+    }
     longToast("state ${response?.status.toString()}")
   }
 
@@ -141,6 +178,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
     mMap = googleMap
     mMap.isMyLocationEnabled = true
     mMap.isBuildingsEnabled = true
+    mMap.isTrafficEnabled = true
     mMap.setOnMyLocationButtonClickListener(this)
     mMap.setOnMarkerClickListener(this)
     mMap.setOnMapClickListener(this)
