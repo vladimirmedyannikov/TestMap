@@ -113,6 +113,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
     if (mMarkers.size > 2) {
       doInBackground(api.getDirectionApi(mapOf("origin" to "${mStart?.latitude},${mStart?.longitude}",
           "destination" to "${mEnd?.latitude},${mEnd?.longitude}",
+          "mode" to "walking",
           "waypoints" to "optimize:true|${sb.toString()}",
           "key" to "AIzaSyDPd1XUXQ99XkVXfU4avf4fJeoVQ2eNj-k")))
           .subscribe({ onLoadResponse(it) }, { longToast(it.message.toString()) })
